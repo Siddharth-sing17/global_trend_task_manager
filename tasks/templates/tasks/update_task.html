@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Task</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { text-align: center; color: #333; margin-bottom: 20px; }
+        input, select, button { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        button { background: #007bff; color: white; font-weight: bold; border: none; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .cancel-btn { display: block; text-align: center; margin-top: 10px; color: #666; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Update Task</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="title" value="{{ task.title }}" required>
+        
+        <input type="text" name="description" value="{{ task.description }}">
+        
+        <select name="status">
+            <option value="Pending" {% if task.status == 'Pending' %}selected{% endif %}>Pending</option>
+            <option value="In Progress" {% if task.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+            <option value="Completed" {% if task.status == 'Completed' %}selected{% endif %}>Completed</option>
+        </select>
+        
+        <button type="submit">Update Task</button>
+        <a href="{% url 'index' %}" class="cancel-btn">Cancel</a>
+    </form>
+</div>
+
+</body>
+</html>
