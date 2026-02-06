@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Trend Task Manager</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: #f4f4f9; 
+            margin: 0; 
+            padding: 20px; 
+            display: flex; 
+            justify-content: center; 
+        }
+        .container { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+            width: 95%; /* Change 1: Width badha di (Pore screen pe) */
+            max-width: 1400px; /* Limit taaki bohot zyada fail na jaye */
+        }
+        h2 { text-align: center; color: #333; margin-bottom: 30px; }
+        
+        /* Form Styling */
+        form { display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; background: #f8f9fa; padding: 20px; border-radius: 8px; }
+        input, select { padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
+        input[name="title"] { flex: 2; }
+        input[name="description"] { flex: 3; }
+        select { flex: 1; }
+        
+        button { 
+            padding: 12px 30px; 
+            background: #28a745; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            font-weight: bold;
+        }
+        button:hover { background: #218838; }
+
+        /* Table Styling */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; font-size: 16px; }
+        th { background: #343a40; color: white; } /* Header Dark kar diya for better look */
+        
+        /* Status Colors */
+        .status-Pending { color: #ffc107; font-weight: bold; background: #fff3cd; padding: 5px 10px; border-radius: 4px; }
+        .status-In { color: #17a2b8; font-weight: bold; background: #d1ecf1; padding: 5px 10px; border-radius: 4px; }
+        .status-Completed { color: #28a745; font-weight: bold; background: #d4edda; padding: 5px 10px; border-radius: 4px; }
+        
+        .delete-btn { 
+            color: white; 
+            background: #dc3545; 
+            padding: 8px 15px; 
+            text-decoration: none; 
+            border-radius: 4px; 
+            font-size: 14px;
+        }
+        .delete-btn:hover { background: #c82333; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Task Management App</h2>
+    
+    <form action="{% url 'add_task' %}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="title" placeholder="Task Title (e.g., Complete Assignment)" required>
+        <input type="text" name="description" placeholder="Description">
+        <select name="status">
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+        </select>
+        <button type="submit">Add Task</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 20%;">Title</th>
+                <th style="width: 40%;">Description</th>
+                <th style="width: 20%;">Status</th>
+                <th style="width: 20%;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr>
+                <td>{{ task.title }}</td>
+                <td>{{ task.description }}</td>
+                <td><span class="status-{{ task.status|slice:':2' }}">{{ task.status }}</span></td>
+                <td><a href="{% url 'delete_task' task.id %}" class="delete-btn">Delete</a></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" style="text-align:center; padding: 30px; color: #666;">No tasks found yet. Add a new task from above!</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
