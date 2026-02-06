@@ -3,106 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Trend Task Manager</title>
+    <title>Task Manager - Global Trend</title>
     <style>
-        body { 
-            font-family: 'Segoe UI', sans-serif; 
-            background: #f4f4f9; 
-            margin: 0; 
-            padding: 20px; 
-            display: flex; 
-            justify-content: center; 
+        /* CSS Styling for Full Screen Look */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
         }
-        .container { 
-            background: white; 
-            padding: 30px; 
-            border-radius: 8px; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
-            width: 95%; /* Change 1: Width badha di (Pore screen pe) */
-            max-width: 1400px; /* Limit taaki bohot zyada fail na jaye */
+
+        /* Top Navigation Bar */
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem 2rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        h2 { text-align: center; color: #333; margin-bottom: 30px; }
-        
-        /* Form Styling */
-        form { display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; background: #f8f9fa; padding: 20px; border-radius: 8px; }
-        input, select { padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
-        input[name="title"] { flex: 2; }
-        input[name="description"] { flex: 3; }
-        select { flex: 1; }
-        
-        button { 
-            padding: 12px 30px; 
-            background: #28a745; 
-            color: white; 
-            border: none; 
-            border-radius: 5px; 
-            cursor: pointer; 
-            font-size: 16px; 
+
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            min-height: 80vh; /* Ensures it covers most of the screen */
+        }
+
+        /* Add Task Form Styling */
+        .add-task-form {
+            display: flex;
+            gap: 10px;
+            background: #e9ecef;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .add-task-form input, .add-task-form select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            flex: 1; /* Inputs will take available space */
+        }
+
+        .add-task-form button {
+            padding: 10px 20px;
+            background-color: #28a745; /* Green */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
             font-weight: bold;
         }
-        button:hover { background: #218838; }
+
+        .add-task-form button:hover { background-color: #218838; }
 
         /* Table Styling */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; font-size: 16px; }
-        th { background: #343a40; color: white; } /* Header Dark kar diya for better look */
-        
-        /* Status Colors */
-        .status-Pending { color: #ffc107; font-weight: bold; background: #fff3cd; padding: 5px 10px; border-radius: 4px; }
-        .status-In { color: #17a2b8; font-weight: bold; background: #d1ecf1; padding: 5px 10px; border-radius: 4px; }
-        .status-Completed { color: #28a745; font-weight: bold; background: #d4edda; padding: 5px 10px; border-radius: 4px; }
-        
-        .delete-btn { 
-            color: white; 
-            background: #dc3545; 
-            padding: 8px 15px; 
-            text-decoration: none; 
-            border-radius: 4px; 
-            font-size: 14px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
         }
-        .delete-btn:hover { background: #c82333; }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        tr:hover { background-color: #f1f1f1; }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: white;
+            font-weight: bold;
+        }
+        .status-Pending { background-color: #ffc107; color: #333; }
+        .status-In-Progress { background-color: #17a2b8; } /* Corrected class name handling below */
+        .status-Completed { background-color: #28a745; }
+
+        /* Action Buttons (Update/Delete) */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            text-decoration: none;
+            color: white;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .btn-update { background-color: #007bff; } /* Blue */
+        .btn-update:hover { background-color: #0056b3; }
+
+        .btn-delete { background-color: #dc3545; } /* Red */
+        .btn-delete:hover { background-color: #c82333; }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .add-task-form { flex-direction: column; }
+            table { display: block; overflow-x: auto; }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Task Management App</h2>
-    
-    <form action="{% url 'add_task' %}" method="POST">
-        {% csrf_token %}
-        <input type="text" name="title" placeholder="Task Title (e.g., Complete Assignment)" required>
-        <input type="text" name="description" placeholder="Description">
-        <select name="status">
-            <option value="Pending">Pending</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Completed">Completed</option>
-        </select>
-        <button type="submit">Add Task</button>
-    </form>
+    <header>
+        <h1>Global Trend Task Manager</h1>
+    </header>
 
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 20%;">Title</th>
-                <th style="width: 40%;">Description</th>
-                <th style="width: 20%;">Status</th>
-                <th style="width: 20%;">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for task in tasks %}
-            <tr>
-                <td>{{ task.title }}</td>
-                <td>{{ task.description }}</td>
-                <td><span class="status-{{ task.status|slice:':2' }}">{{ task.status }}</span></td>
-                <td><a href="{% url 'delete_task' task.id %}" class="delete-btn">Delete</a></td>
-            </tr>
-            {% empty %}
-            <tr><td colspan="4" style="text-align:center; padding: 30px; color: #666;">No tasks found yet. Add a new task from above!</td></tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+    <div class="container">
+        
+        <form method="POST" action="{% url 'add_task' %}" class="add-task-form">
+            {% csrf_token %}
+            <input type="text" name="title" placeholder="Task Title (e.g., Complete Project)" required>
+            <input type="text" name="description" placeholder="Description">
+            <select name="status">
+                <option value="Pending">Pending</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+            </select>
+            <button type="submit">➕ Add Task</button>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Date Created</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td><strong>{{ task.title }}</strong></td>
+                    <td>{{ task.description }}</td>
+                    
+                    <td>
+                        <span class="status-badge status-{{ task.status|cut:' ' }}">
+                            {{ task.status }}
+                        </span>
+                    </td>
+                    
+                    <td>{{ task.created_at|date:"d M Y" }}</td>
+                    
+                    <td class="action-buttons">
+                        <a href="{% url 'update_task' task.id %}" class="btn btn-update">Update</a>
+                        
+                        <a href="{% url 'delete_task' task.id %}" class="btn btn-delete">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align:center; padding: 20px;">
+                        No tasks yet. Add one above! 🚀
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
 
 </body>
 </html>
